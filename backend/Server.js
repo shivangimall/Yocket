@@ -33,10 +33,9 @@ app.get('/vehicles', (req, res) => {
 
 // Route to handle capturing the fugitive
 app.post('/capture', (req, res) => {
-  // Extract cop's chosen cities and vehicles from request body
+ 
   const { cops } = req.body;
 
-  // Get a random index to select a city as the fugitive's location
   const randomIndex = Math.floor(Math.random() * cities.length);
   const fugitiveCity = cities[randomIndex].name;
 

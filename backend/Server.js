@@ -43,39 +43,20 @@ app.post('/capture', (req, res) => {
   // Logic to determine if any cop successfully captured the fugitive
   let success = false;
   let capturingCop = null;
+  let capturingCity = null;
+  let capturingVechile = null;
 
   cops.forEach((cop, index) => {
     if (cop.city === fugitiveCity) {
       success = true;
       capturingCop = `Cop ${index + 1}`;
+      capturingCity = cop.city;
+      capturingVechile = cop.vehicle;
     }
   });
 
-  res.json({ success, capturingCop });
+  res.json({ success, capturingCop , capturingCity,capturingVechile});
 });
-
-// // Route to handle capturing the fugitive
-// app.post('/capture', (req, res) => {
-//   // Extract cop's chosen cities from request body
-//   const { cops } = req.body;
-
-//   // Get a random index to select a city as the fugitive's location
-//   const randomIndex = Math.floor(Math.random() * cities.length);
-//   const fugitiveCity = cities[randomIndex].name;
-
-//   // Logic to determine if any cop successfully captured the fugitive
-//   let success = false;
-//   let capturingCop = null;
-
-//   cops.forEach((cop, index) => {
-//     if (cop.city === fugitiveCity) {
-//       success = true;
-//       capturingCop = `Cop ${index + 1}`;
-//     }
-//   });
-
-//   res.json({ success, capturingCop });
-// });
 
 
 app.listen(PORT, () => {

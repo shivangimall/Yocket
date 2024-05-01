@@ -14,6 +14,7 @@ const Selection = () => {
   const [vehicles, setVehicles] = useState([]);
   const [result, setResult] = useState(null);
   const [selectedCities, setSelectedCities] = useState(Array(3).fill(''));
+  const [availableVehicles, setAvailableVehicles] = useState([]);
 
   useEffect(() => {
     // Fetch cities data from the backend
@@ -29,6 +30,7 @@ const Selection = () => {
     axios.get('http://localhost:3000/vehicles')
       .then(response => {
         setVehicles(response.data);
+        setAvailableVehicles(response.data);
       })
       .catch(error => {
         console.error('Error fetching vehicles:', error);
@@ -49,14 +51,48 @@ const Selection = () => {
       return newSelectedCities;
     });
   };
-
   const handleVehicleSelect = (vehicle, index) => {
     setCopSelections(prevState => {
       const newState = [...prevState];
       newState[index].vehicle = vehicle;
       return newState;
     });
+  
+    // Enable the previously selected vehicle
+    const previousVehicle = copSelections[index].vehicle;
+    if (previousVehicle !== '') {
+      setAvailableVehicles(prevVehicles => prevVehicles.map(prevVehicle => {
+        if (prevVehicle.type === previousVehicle) {
+          return { ...prevVehicle, count: prevVehicle.count + 1 };
+        }
+        return prevVehicle;
+      }));
+    }
+  
+    // Disable the selected vehicle for other cops
+    setAvailableVehicles(prevVehicles => prevVehicles.map(prevVehicle => {
+      if (prevVehicle.type === vehicle) {
+        return { ...prevVehicle, count: prevVehicle.count - 1 };
+      }
+      return prevVehicle;
+    }));
   };
+  
+  // const handleVehicleSelect = (vehicle, index) => {
+  //   setCopSelections(prevState => {
+  //     const newState = [...prevState];
+  //     newState[index].vehicle = vehicle;
+  //     return newState;
+  //   });
+
+  //   // Decrease the count of the selected vehicle type
+  //   setAvailableVehicles(prevVehicles => prevVehicles.map(prevVehicle => {
+  //     if (prevVehicle.type === vehicle && prevVehicle.count > 0) {
+  //       return { ...prevVehicle, count: prevVehicle.count - 1 };
+  //     }
+  //     return prevVehicle;
+  //   }));
+  // };
 
   const handleSubmit = () => {
     axios.post('http://localhost:3000/capture', { cops: copSelections })
@@ -89,9 +125,9 @@ const Selection = () => {
                   </select>
                   <select value={cop.vehicle} onChange={(e) => handleVehicleSelect(e.target.value, index)} className="border border-gray-300 rounded-md p-2 text-black">
                     <option value="">Select a Vehicle</option>
-                    {vehicles.map(vehicle => (
-                      <option key={vehicle.type} value={vehicle.type}>
-                        {vehicle.type} - Range: {vehicle.range} KM
+                    {availableVehicles.map(vehicle => (
+                      <option key={vehicle.type} value={vehicle.type} disabled={vehicle.count === 0}>
+                        {vehicle.type} - Range: {vehicle.range} KM (Available: {vehicle.count})
                       </option>
                     ))}
                   </select>

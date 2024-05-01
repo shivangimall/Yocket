@@ -31,12 +31,52 @@ app.get('/vehicles', (req, res) => {
   res.json(vehicles);
 });
 
-// Route to simulate capture result
+// Route to handle capturing the fugitive
 app.post('/capture', (req, res) => {
-  const { city, vehicle } = req.body;
-  // Implement capture logic here
-  res.json({ success: true, copName: 'John Doe' });
+  // Extract cop's chosen cities and vehicles from request body
+  const { cops } = req.body;
+
+  // Get a random index to select a city as the fugitive's location
+  const randomIndex = Math.floor(Math.random() * cities.length);
+  const fugitiveCity = cities[randomIndex].name;
+
+  // Logic to determine if any cop successfully captured the fugitive
+  let success = false;
+  let capturingCop = null;
+
+  cops.forEach((cop, index) => {
+    if (cop.city === fugitiveCity) {
+      success = true;
+      capturingCop = `Cop ${index + 1}`;
+    }
+  });
+
+  res.json({ success, capturingCop });
 });
+
+// // Route to handle capturing the fugitive
+// app.post('/capture', (req, res) => {
+//   // Extract cop's chosen cities from request body
+//   const { cops } = req.body;
+
+//   // Get a random index to select a city as the fugitive's location
+//   const randomIndex = Math.floor(Math.random() * cities.length);
+//   const fugitiveCity = cities[randomIndex].name;
+
+//   // Logic to determine if any cop successfully captured the fugitive
+//   let success = false;
+//   let capturingCop = null;
+
+//   cops.forEach((cop, index) => {
+//     if (cop.city === fugitiveCity) {
+//       success = true;
+//       capturingCop = `Cop ${index + 1}`;
+//     }
+//   });
+
+//   res.json({ success, capturingCop });
+// });
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

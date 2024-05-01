@@ -1,11 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import LandingPage from './components/LandingPage';
+import Selection from './components/Selection';
+import Result from './components/Result';
+
+
 
 function App() {
   return (
-    <div className="App">
-     <h1 className='text-red-800'>Hello</h1>
-    </div>
+    <BrowserRouter>
+   
+      <Routes>
+        <Route path='/' element={<LandingPage />} />
+
+        <Route path='/city-selection' element={<Selection />} />
+        <Route path='/result' element={<Result />} />
+        
+      </Routes>
+
+    
+    </BrowserRouter>
   );
 }
 

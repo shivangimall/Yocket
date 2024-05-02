@@ -3,7 +3,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LandingPage from './components/LandingPage';
 import Selection from './components/Selection';
 import Result from './components/Result';
-
+export const config = {
+  endpoint: `https://yocket-3.onrender.com`,
+};
 
 
 function App() {

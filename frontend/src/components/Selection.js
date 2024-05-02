@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Result from './Result';
+import { config } from '../App';
+
 
 const Selection = () => {
   const navigate = useNavigate();
@@ -18,7 +20,7 @@ const Selection = () => {
 
   useEffect(() => {
     // Fetch cities data from the backend
-    axios.get('http://localhost:3000/cities')
+    axios.get(`${config.endpoint}/cities`)
       .then(response => {
         setCities(response.data);
       })
@@ -27,7 +29,7 @@ const Selection = () => {
       });
 
     // Fetch vehicles data from the backend
-    axios.get('http://localhost:3000/vehicles')
+    axios.get(`${config.endpoint}/vehicles`)
       .then(response => {
         setVehicles(response.data);
         setAvailableVehicles(response.data);
@@ -95,7 +97,7 @@ const Selection = () => {
   // };
 
   const handleSubmit = () => {
-    axios.post('http://localhost:3000/capture', { cops: copSelections })
+    axios.post(`${config.endpoint}/capture`, { cops: copSelections })
       .then(response => {
         setResult(response.data); // Set result received from the backend
       })

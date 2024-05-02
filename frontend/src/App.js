@@ -4,7 +4,7 @@ import LandingPage from './components/LandingPage';
 import Selection from './components/Selection';
 import Result from './components/Result';
 export const config = {
-  endpoint: `https://yocket-3.onrender.com`,
+  endpoint: `https://yocket-4.onrender.com`,
 };
 
 
